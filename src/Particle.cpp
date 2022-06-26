@@ -23,23 +23,39 @@ const static float FLUID_VISCOSITY = 350;
 //const static float W_SPIKY = -15.f / (2.f * PI * pow(KERNEL_R, 6.f));
 //const static float W_VISCOSITY = 45.f / (PI * pow(KERNEL_R, 6.f));
 
+/**
+ * Вычисляет постоянную, являющуюся коэффициентом при оценке методом сглаживания ядра,
+ * необходимую для вычисления плотности частицы.
+ * @return искомая постоянная.
+ */
 float getW_POLY6()
 {
     static float W_POLY6 = 315.f / (64.f * PI * pow(KERNEL_R, 9.f));
     return W_POLY6;
 }
 
+/**
+ * Вычисляет постоянную, являющуюся коэффициентом при оценке методом сглаживания ядра,
+ * необходимую для вычисления силы давления.
+ * @return искомая постоянная.
+ */
 float getW_SPIKY()
 {
     static float W_SPIKY = -15.f / (2.f * PI * pow(KERNEL_R, 6.f));
     return W_SPIKY;
 }
 
+/**
+ * Вычисляет постоянную, являющуюся коэффициентом при оценке методом сглаживания ядра,
+ * необходимую для вычисления силы вязкого трения.
+ * @return искомая постоянная.
+ */
 float getW_VISCOSITY()
 {
     static float W_VISCOSITY = 45.f / (PI * pow(KERNEL_R, 6.f));
     return W_VISCOSITY;
 }
+
 
 Particle::Particle(sf::Vector2f position)
 {
@@ -51,6 +67,12 @@ Particle::Particle(sf::Vector2f position)
     pressure = 1;
 }
 
+/**
+ * Перегрузка оператора сравнения для класса частиц.
+ * Частицы считаются равными только при полном совпадении всех признаков.
+ * @param p вторая частица.
+ * @return сообщает совпадают ли частицы.
+ */
 bool Particle::operator==(Particle const& p) const
 {
     if (velocity == p.velocity && force == p.force && density == p.density && pressure == p.pressure)
@@ -65,7 +87,11 @@ bool Particle::operator==(Particle const& p) const
 //    return os;
 //}
 
-
+/**
+ * Создает боковые и нижние границы окна для частиц.
+ * @param particles вектор существующих частиц.
+ * @return вектор существующих частиц, нарушившие границы частицы возвращены в видимую часть окна.
+ */
 vector<Particle> Check_Borders(vector<Particle> particles)
 {
     for (auto &i : particles)
@@ -89,7 +115,12 @@ vector<Particle> Check_Borders(vector<Particle> particles)
     return particles;
 }
 
-vector<Particle> Leap_frog_movement(vector<Particle> particles)
+/**
+ * Вычисление изменения скорости и координат частицы за единицу времени FRAME_TIME.
+ * @param particles вектор существующих частиц.
+ * @return вектор существующих частиц спустя время FRAME_TIME.
+ */
+vector<Particle> Leapfrog_movement(vector<Particle> particles)
 {
     for (auto &i : particles)
     {
@@ -99,6 +130,11 @@ vector<Particle> Leap_frog_movement(vector<Particle> particles)
     return particles;
 }
 
+/**
+ * Вычисление плотности и давления частиц.
+ * @param particles вектор существующих частиц.
+ * @return вектор существующих частиц.
+ */
 vector<Particle> Pressure_calc(vector<Particle> particles)
 {
     for (auto &i : particles)
@@ -120,6 +156,11 @@ vector<Particle> Pressure_calc(vector<Particle> particles)
     return particles;
 }
 
+/**
+ * Вычисление результирующего вектора сил тяжести, давления и вязкого трения, действующих на частицу.
+ * @param particles вектор существующих частиц.
+ * @return вектор существующих частиц.
+ */
 vector<Particle> Forces_calc(vector<Particle> particles)
 {
     for (auto &i : particles)

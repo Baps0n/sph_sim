@@ -3,8 +3,6 @@
 #include <random>
 #include "Particle.cpp"
 
-using namespace std;
-
 int main()
 {
     sf::Shader shader;
@@ -146,7 +144,7 @@ int main()
 
         sim_particles = Pressure_calc(sim_particles);
         sim_particles = Forces_calc(sim_particles);
-        sim_particles = Leap_frog_movement(sim_particles);
+        sim_particles = Leapfrog_movement(sim_particles);
         sim_particles = Check_Borders(sim_particles);
 
         sf::Sprite sprite(renderTexture.getTexture());

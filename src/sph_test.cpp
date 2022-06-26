@@ -1,32 +1,28 @@
 #include <doctest.h>
 #include <vector>
-#include <iostream>
-#include <iomanip>
 #include "Particle.cpp"
 
 using namespace std;
 
 
 TEST_CASE("W_POLY6") {
-    float val = 0.00000001167303054216972668655216693878173828125;
-    REQUIRE(getW_POLY6() == val);
+    REQUIRE(getW_POLY6() == 0.00000001167303054216972668655216693878173828125);
 }
 
 TEST_CASE("W_SPIKY") {
-    float val = -0.0000091071879069204442203044891357421875;
-    REQUIRE(getW_SPIKY() == val);
+    REQUIRE(getW_SPIKY() == -0.0000091071879069204442203044891357421875);
 }
 
 TEST_CASE("W_SPIKY") {
-    float val = 0.000054643125622533261775970458984375;
-    REQUIRE(getW_VISCOSITY() == val);
+    REQUIRE(getW_VISCOSITY() == 0.000054643125622533261775970458984375);
 }
 
-TEST_CASE("Leap_frog_movement") {
+
+TEST_CASE("Leapfrog_movement") {
     vector<Particle> test_particles;
     test_particles.emplace_back(sf::Vector2f(100,200));
     test_particles.emplace_back(sf::Vector2f(100,210));
-    auto test_res = Leap_frog_movement(test_particles);
+    auto test_res = Leapfrog_movement(test_particles);
     auto est_res = test_particles;
     est_res[0].velocity = sf::Vector2f(0,1 + 10 * FRAME_TIME);
     est_res[0].pos = sf::Vector2f(100,200 + FRAME_TIME);
